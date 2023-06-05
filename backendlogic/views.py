@@ -28,6 +28,9 @@ class Register(FormView):
 
     def form_valid(self, form):
         print(form.cleaned_data)
+        user = form.save()
+        print(user)
+        print("to jest sztos")
         return super().form_valid(form)
 
     def form_invalid(self, form):
@@ -35,7 +38,6 @@ class Register(FormView):
         return super().form_invalid(form)
 
 class Login(LoginView):
-    form_class = forms.LoginForm
     template_name = 'login.html'
     redirect_authenticated_user = 'index'
 

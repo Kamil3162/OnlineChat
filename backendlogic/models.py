@@ -46,11 +46,13 @@ class UserApp(AbstractBaseUser, PermissionsMixin):
     password = models.CharField(max_length=200)
     email_address = models.EmailField(unique=True)
     room = models.ForeignKey(Room, null=True, on_delete=models.CASCADE)
+    objects = UserManager()
     is_active = True
     is_superuser = False
     is_staff = False
 
-    USERNAME_FIELD = "email_address"
+    USERNAME_FIELD = 'email_address'
+    REQUIRED_FIELDS = ['password']
 
     def assign_user_to_room(self, room:Room):
         self.room = room
