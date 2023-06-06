@@ -100,11 +100,10 @@ class RoomLoginBasedModel(forms.ModelForm):
         model = models.Room
         fields = ['password']
 
-    @staticmethod
     def check_password(self, object_model, password):
         password_input = password
         password_proper = object_model.password
-        password_compare = check_password(password_proper, password_input)
+        password_compare = check_password(password_input, password_proper)
         if password_compare:
             return True
         return False

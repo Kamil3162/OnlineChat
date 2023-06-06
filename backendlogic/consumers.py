@@ -18,6 +18,7 @@ class WSConsumer(AsyncWebsocketConsumer):
         await self.close()
 
     async def receive(self, text_data=None, **kwargs):
+        print("dostałem wiadomosc")
         print(text_data)
         data = json.dumps(text_data)
         await self.send_response("naura")

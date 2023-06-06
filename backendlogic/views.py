@@ -65,15 +65,15 @@ class RoomView(DetailView):
     context_object_name = 'room'
 
     def post(self, request, *args, **kwargs):
-        print(request.POST)
         try:
-            print("post method dzialanie")
-            form = forms.RoomLoginBasedModel()
+            form = forms.RoomLoginBasedModel(request.POST)
+            password_input = request.POST.get('password')
             if form.is_valid():
                 room = self.get_object()
-                if form.check_password(room):
+                if form.check_password(room, password_input):
                     context = {
-                        'messages': Message.objects.all()
+                        'messages': Message.objects.filter(room=room),
+                        'information': "Properly log in"
                     }
                     return render(request, template_name=self.template_name,
                                   context=context)
