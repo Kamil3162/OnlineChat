@@ -13,7 +13,8 @@ from .manager import UserManager
 
 class Room(models.Model):
     name = models.CharField(max_length=70)
-    maximum_user = models.IntegerField(validators=[MaxValueValidator(15)])
+    maximum_user = models.IntegerField(validators=[MaxValueValidator(15)],
+                                       default=0)
     actual_logged_users = models.IntegerField(default=0)
     password = models.CharField(max_length=200)
 

@@ -70,7 +70,7 @@ TEMPLATES = [
 ]
 AUTH_USER_MODEL = 'backendlogic.UserApp'
 WSGI_APPLICATION = 'Chat.wsgi.application'
-
+LOGIN_REDIRECT_URL = '/'
 
 
 # Database

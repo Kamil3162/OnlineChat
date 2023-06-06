@@ -1,11 +1,12 @@
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
-from .models import UserApp
+from . import models
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.hashers import make_password
 
 class RegisterForm(forms.ModelForm):
     class Meta:
-        model = UserApp
+        model = models.UserApp
         fields = ['nickname', 'username', 'surname', 'password', 'email_address']
 
     def save(self, commit=True):
@@ -62,3 +63,19 @@ class LoginForm(forms.Form):
         except Exception as e:
             print("something is wrong with login:{}".format(str(e)))
             raise forms.ValidationError("An error occurred during login.")
+
+
+class RoomForm(forms.ModelForm):
+    class Meta:
+        model = models.Room
+        fields = ['name', 'password']
+
+    def save(self, commit=True):
+        room = super().save(commit=False)       # creating new instance of room
+        password = self.cleaned_data['password']
+        hashed = make_password(password)
+        room.password = hashed
+        if commit:
+            room.save()
+        return room
+

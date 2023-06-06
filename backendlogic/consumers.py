@@ -12,7 +12,7 @@ class WSConsumer(AsyncWebsocketConsumer):
 
     async def connect(self):
         await self.accept()
-        print(self.scope)
+        print("polaczenie z websocket")
         print("damian")
 
     async def disconnect(self, code):

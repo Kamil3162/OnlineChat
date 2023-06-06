@@ -7,6 +7,12 @@
 <body>
     <h1 id="app">{{ text }}</h1>
     <h2>SIema</h2>
+    {% if request.session.username %}
+        <p>Witaj {{ request.session.username }}</p>
+        <a href="{% url 'logout' %}">
+            <button>Wyloguj</button>
+        </a>
+    {% endif %}
 </body>
 <script>
     var socket = new WebSocket('ws://localhost:8000/ws/some_url');

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    Stworz wlasny pokoj
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Stworz</button>
+    </form>
+</head>
+<body>
+
+</body>
+</html>
