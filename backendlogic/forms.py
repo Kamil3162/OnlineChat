@@ -2,8 +2,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from . import models
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.hashers import make_password
-
+from django.contrib.auth.hashers import make_password, check_password
 class RegisterForm(forms.ModelForm):
     class Meta:
         model = models.UserApp
@@ -79,3 +78,33 @@ class RoomForm(forms.ModelForm):
             room.save()
         return room
 
+
+class RoomLogin(forms.Form):
+    password = forms.CharField(max_length=200)
+
+    def __init__(self, request=None, *args, **kwargs):
+        super(RoomLogin, self).__init__(*args, **kwargs)
+        self.request = request
+        self.fields['password'].widget.attrs.update({'autofocus': 'autofocus'})
+
+    def check_password(self, object_model):
+        password_input = self.cleaned_data.get('password')
+        password_proper = object_model.password
+        password_compare = check_password(password_proper, password_input)
+        if password_compare:
+            return True
+        return False
+
+class RoomLoginBasedModel(forms.ModelForm):
+    class Meta:
+        model = models.Room
+        fields = ['password']
+
+    @staticmethod
+    def check_password(self, object_model, password):
+        password_input = password
+        password_proper = object_model.password
+        password_compare = check_password(password_proper, password_input)
+        if password_compare:
+            return True
+        return False

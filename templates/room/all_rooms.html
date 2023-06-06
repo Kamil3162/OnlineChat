@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    {% for room in all_rooms %}
+        <p>{{ room.name }}</p>
+        <p>{{ room.pk }}</p>
+        <a href="{% url 'room_detail' room.pk %}">
+            <button>Join</button>
+        </a>
+    {% endfor %}
+</body>
+</html>

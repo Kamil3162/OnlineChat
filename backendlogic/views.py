@@ -9,21 +9,20 @@ from django.views.generic import (
     DeleteView,
     FormView,
 )
-from .models import UserApp
+from .models import UserApp, Room, Message
 from django.contrib.auth import get_user_model
 from . import forms
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
-
-
-class Index(View):
+from django.db.models import Q
+class IndexView(View):
     def get(self, request):
         print(request.user.username)
         print(request)
         return render(request, 'base.html')
 
 
-class Register(FormView):
+class RegisterView(FormView):
     template_name = 'register/register.html'
     form_class = forms.RegisterForm
     success_url = 'login'
@@ -50,7 +49,7 @@ class Login(LoginView):
 class Logout(LogoutView):
     next_page = 'index'
 
-class RoomCreate(CreateView):
+class RoomCreateView(CreateView):
     template_name = 'room/room_create.html'
     form_class = forms.RoomForm
     success_url = '/'
@@ -60,7 +59,49 @@ class RoomCreate(CreateView):
         print(room)
         return super().form_valid(form)     # equivalet return super(RoomCreate, self).form_valid(form)
 
+class RoomView(DetailView):
+    template_name = 'room/room_detail.html'
+    model = Room
+    context_object_name = 'room'
 
-class Room(DetailView):
-    pass
+    def post(self, request, *args, **kwargs):
+        print(request.POST)
+        try:
+            print("post method dzialanie")
+            form = forms.RoomLoginBasedModel()
+            if form.is_valid():
+                room = self.get_object()
+                if form.check_password(room):
+                    context = {
+                        'messages': Message.objects.all()
+                    }
+                    return render(request, template_name=self.template_name,
+                                  context=context)
+                else:
+                    return HttpResponse("Invalid password")
+            else:
+                form_errors = form.errors.as_json()
+                return HttpResponse(f"Invalid data passed: {form_errors}",
+                                    status=400)
+        except Exception as e:
+            raise Exception(str(e))
+
+    def get(self, request, *args, **kwargs):
+        print(request.user)
+        print('This is the GET method')
+        form = forms.RoomLoginBasedModel()
+        return render(request, template_name=self.template_name, context={'form': form})
+
+class RoomsView(ListView):
+    template_name = 'room/all_rooms.html'
+    model = Room
+    context_object_name = 'all_rooms'
+
+    def get_queryset(self):
+        return super().get_queryset()
+
+
+
+
+
 

@@ -14,16 +14,5 @@
         </a>
     {% endif %}
 </body>
-<script>
-    var socket = new WebSocket('ws://localhost:8000/ws/some_url');
-    socket.onmessage = (event) =>{
-        var data = JSON.parse(event.data);
-        console.log(data);
-        document.querySelector('#app').innerHTML = data.message;
-    }
-    socket.onerror = (error) =>{
-        console.log(error);
-    }
 
-</script>
 </html>
